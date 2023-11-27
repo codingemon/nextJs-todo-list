@@ -8,6 +8,7 @@ import {
   doc,
   Timestamp,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -110,4 +111,26 @@ export async function deleteATodo(id) {
   return fetchedTodo;
 }
 
-module.export = { fetchTodos, addATodo, fetchATodo, deleteATodo };
+// 단일 할일 수정
+export async function editATodo(id, { title, is_done }) {
+  const fetchedTodo = await fetchATodo(id);
+
+  if (fetchedTodo === null) {
+    return null;
+  }
+
+  const todoRef = doc(db, "todos", id);
+
+  await updateDoc(todoRef, {
+    title: title,
+    is_done: is_done,
+  });
+  return {
+    id: id,
+    title: title,
+    is_done: is_done,
+    created_at: fetchedTodo.created_at,
+  };
+}
+
+module.export = { fetchTodos, addATodo, fetchATodo, deleteATodo, editATodo };

@@ -17,6 +17,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const { title } = await request.json();
 
+  // 타이틀이 없는경우는 null 말고 undefined
+  if (title === undefined) {
+    const errMessage = {
+      message: "할 일을 입력해주세요",
+    };
+    return NextResponse.json(errMessage, { status: 422 });
+  }
+
   const addedTodo = await addATodo({ title });
 
   const response = {

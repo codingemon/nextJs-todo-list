@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchATodo, deleteATodo } from "@/data/firestore";
+import { fetchATodo, deleteATodo, editATodo } from "@/data/firestore";
 
 // 할일 단일 조회
 export async function GET(
@@ -53,17 +53,15 @@ export async function POST(
 ) {
   const { title, is_done } = await request.json();
 
-  const editedTodo = {
-    id: params.slug,
-    title,
-    is_done: false,
-  };
+  const editedTodo = await editATodo(params.slug, { title, is_done });
+
+  if (editedTodo === null) {
+    return new Response(null, { status: 204 });
+  }
 
   const respones = {
     message: "단일 할일 수정 성공",
-    data: {
-      editedTodo,
-    },
+    data: editedTodo,
   };
 
   return NextResponse.json(respones, { status: 200 });
