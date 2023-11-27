@@ -1,3 +1,10 @@
-export async function GET(request: Request) {
-  return new Response("코딩은 즐거워");
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(request: NextRequest) {
+  const respones = {
+    message: "반가워",
+    data: "오늘도 코딩을 해보자",
+  };
+
+  return NextResponse.json(respones, { status: 200 });
 }
