@@ -24,7 +24,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
   const [newTodoInput, setnewTodoInput] = useState("");
 
   return (
-    <div>
+    <>
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <Input
           type="text"
@@ -40,7 +40,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
             Do it!
           </Button>
         ) : (
-          <Popover placement="top" showArrow={true}>
+          <Popover placement="top">
             <PopoverTrigger>
               <Button color="default" variant="faded" className="h-14">
                 Do it!
@@ -107,7 +107,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
             ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 };
 
