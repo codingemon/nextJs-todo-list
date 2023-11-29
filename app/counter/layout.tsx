@@ -1,4 +1,4 @@
-export default function PricingLayout({
+export default function CounterLayout({
   children,
 }: {
   children: React.ReactNode;
