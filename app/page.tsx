@@ -10,43 +10,31 @@ export default function Home() {
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-lg text-center justify-center">
-        <h1 className={title()}>Make&nbsp;</h1>
-        <h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
+        <h1 className={title()}>HaeBoJa&nbsp;</h1>
+        <h1 className={title({ color: "violet" })}>해보자&nbsp;</h1>
         <br />
-        <h1 className={title()}>
-          websites regardless of your design experience.
-        </h1>
+        <h1 className={title()}>당장 생각나는 해야할것들</h1>
         <h2 className={subtitle({ class: "mt-4" })}>
-          Beautiful, fast and modern React UI library.
+          일단은 기록하고 해보는거예요!
         </h2>
       </div>
 
       <div className="flex gap-3">
         <Link
           isExternal
-          href={siteConfig.links.docs}
-          className={buttonStyles({
-            color: "primary",
-            radius: "full",
-            variant: "shadow",
-          })}
-        >
-          Documentation
-        </Link>
-        <Link
-          isExternal
           className={buttonStyles({ variant: "bordered", radius: "full" })}
           href={siteConfig.links.github}
         >
           <GithubIcon size={20} />
-          GitHub
+          GitHub(HaeBoJa)
         </Link>
       </div>
 
       <div className="mt-8">
         <Snippet hideSymbol hideCopyButton variant="flat">
           <span>
-            Get started by editing <Code color="primary">app/page.tsx</Code>
+            사용 기술 <Code color="primary">Next.js</Code>{" "}
+            <Code color="primary">Typescript</Code>
           </span>
         </Snippet>
       </div>
