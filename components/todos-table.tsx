@@ -13,8 +13,12 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
 } from "@nextui-org/react";
 import { Todo } from "@/types";
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TodosTable = ({ todos }: { todos: Todo[] }) => {
   // 할일 추가 가능 여부
@@ -23,8 +27,51 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
   // 입력된 할일
   const [newTodoInput, setnewTodoInput] = useState("");
 
+  // 로딩상태
+  const [isLoding, setisLoding] = useState<boolean>(false);
+
+  // 라우터
+  const router = useRouter();
+
+  // 할일 추가하기
+  const addATodoHandler = async (title: string) => {
+    if (!todoAddEnable) {
+      return;
+    }
+    setTodoAddEnable(false);
+    setisLoding(true);
+    await new Promise((f) => setTimeout(f, 600));
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/todos/`, {
+      method: "post",
+      body: JSON.stringify({
+        title: title,
+      }),
+      cache: "no-store",
+    });
+    setnewTodoInput("");
+    router.refresh();
+    setisLoding(false);
+    notifyTodoAddedEvent("할일을 추가했어요! 👨‍💻");
+    console.log(`할일 추가완료 : ${newTodoInput}`);
+    // const res = await fetch(`${process.env.BASE_URL}/api/todos/`);
+  };
+
+  const notifyTodoAddedEvent = (msg: string) => toast.success(msg);
+
   return (
-    <>
+    <div className="flex flex-col space-y-2">
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
         <Input
           type="text"
@@ -36,7 +83,13 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
           }}
         />
         {todoAddEnable ? (
-          <Button color="warning" className="h-14">
+          <Button
+            color="warning"
+            className="h-14"
+            onPress={async () => {
+              await addATodoHandler(newTodoInput);
+            }}
+          >
             Do it!
           </Button>
         ) : (
@@ -54,6 +107,9 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
             </PopoverContent>
           </Popover>
         )}
+      </div>
+      <div className="h-6">
+        {isLoding && <Spinner size="sm" color="warning" />}
       </div>
 
       <Table aria-label="Example static collection table">
@@ -107,7 +163,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
             ))}
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 };
 
