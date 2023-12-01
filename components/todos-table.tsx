@@ -80,7 +80,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
   const editATodoHandler = async (
     id: string,
     editedTitle: string,
-    edtiedIsDone: string
+    edtiedIsDone: boolean
   ) => {
     setIsLoding(true);
     await new Promise((f) => setTimeout(f, 600));
