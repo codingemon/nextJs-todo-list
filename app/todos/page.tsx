@@ -1,6 +1,7 @@
 import { title } from "@/components/primitives";
 import TodosTable from "@/components/todos-table";
 import { fetchTodos } from "@/data/firestore";
+import { Todo } from "@/types";
 
 // 서버 컴포넌트에서 API를 땡기자
 async function fetchTodosApiCall() {
@@ -11,19 +12,22 @@ async function fetchTodosApiCall() {
 
   const contentTypeHeaderValue = res.headers.get("content-Type");
 
-  // 수정: json인 경우에만 반환
-  if (contentTypeHeaderValue?.includes("application/json")) {
-    console.log("fetchTodosApiCall contentTypeCheck: ", contentTypeHeaderValue);
-    return res.json();
+  // 수정중 json
+  if (contentTypeHeaderValue?.includes("text/html")) {
+    console.log(
+      "fetchTodosApiCall / contentTypeCheck: ",
+      contentTypeHeaderValue
+    );
+    return null;
   }
 
-  return null;
+  return res.json();
 }
+
 // 서버 컴포넌트
 export default async function TodosPage() {
   const response = await fetchTodosApiCall();
 
-  // 수정: response가 null이 아니면서 data가 있는 경우에만 할당
   const fetchedTodos = response?.data ?? [];
 
   return (
