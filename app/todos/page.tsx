@@ -11,26 +11,25 @@ async function fetchTodosApiCall() {
 
   const contentTypeHeaderValue = res.headers.get("content-Type");
 
-  // 수정중 json
-  if (contentTypeHeaderValue?.includes("text/html")) {
+  // 수정: json인 경우에만 반환
+  if (contentTypeHeaderValue?.includes("application/json")) {
     console.log("fetchTodosApiCall contentTypeCheck: ", contentTypeHeaderValue);
-    return null;
+    return res.json();
   }
 
-  return res.json();
+  return null;
 }
-
 // 서버 컴포넌트
 export default async function TodosPage() {
   const response = await fetchTodosApiCall();
 
-  // fix json
+  // 수정: response가 null이 아니면서 data가 있는 경우에만 할당
   const fetchedTodos = response?.data ?? [];
 
   return (
     <div className="flex-col space-y-8">
       <h1 className={title()}>Todos</h1>
-      <TodosTable todos={response.data ?? []} />
+      <TodosTable todos={fetchedTodos} />
     </div>
   );
 }
