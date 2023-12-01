@@ -14,11 +14,24 @@ import {
   PopoverContent,
   PopoverTrigger,
   Spinner,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
-import { Todo } from "@/types";
+
+import { FocusedTodoType, Todo } from "@/types";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { VerticalDotsIcon } from "@/components/icons";
+import { CustomModalType } from "@/types/index";
 
 const TodosTable = ({ todos }: { todos: Todo[] }) => {
   // 할일 추가 가능 여부
@@ -29,6 +42,12 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
 
   // 로딩상태
   const [isLoding, setisLoding] = useState<boolean>(false);
+
+  // 띄우는 모달 상태
+  const [currentModalData, setCurrentModalData] = useState<FocusedTodoType>({
+    focusedTodo: null,
+    modalType: "detail" as CustomModalType,
+  });
 
   // 라우터
   const router = useRouter();
@@ -58,8 +77,43 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
 
   const notifyTodoAddedEvent = (msg: string) => toast.success(msg);
 
+  // 모달
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const ModalComponent = () => {
+    return (
+      <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                {currentModalData.modalType}
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam pulvinar risus non risus hendrerit venenatis.
+                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Action
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    );
+  };
+
   return (
     <div className="flex flex-col space-y-2">
+      {ModalComponent()}
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -118,6 +172,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
           <TableColumn>할일내용</TableColumn>
           <TableColumn>완료여부</TableColumn>
           <TableColumn>생성일</TableColumn>
+          <TableColumn>액션</TableColumn>
         </TableHeader>
         <TableBody emptyContent={"보여줄 데이터가 없어요. 작성해보세요 !"}>
           {todos &&
@@ -159,6 +214,31 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
                   )}
                 </TableCell>
                 <TableCell>{`${aTodo.created_at}`}</TableCell>
+                <TableCell>
+                  <div className="relative flex justify-end items-center gap-2">
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <Button isIconOnly size="sm" variant="light">
+                          <VerticalDotsIcon className="text-default-300" />
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        onAction={(key) => {
+                          console.log(`aTodo.id : ${aTodo.id} : key: ${key}`);
+                          setCurrentModalData({
+                            focusedTodo: aTodo,
+                            modalType: key as CustomModalType,
+                          });
+                          onOpen();
+                        }}
+                      >
+                        <DropdownItem key="detail">상세보기</DropdownItem>
+                        <DropdownItem key="update">수정</DropdownItem>
+                        <DropdownItem key="delete">삭제</DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>

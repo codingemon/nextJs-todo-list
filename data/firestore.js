@@ -9,6 +9,8 @@ import {
   Timestamp,
   deleteDoc,
   updateDoc,
+  orderBy,
+  query,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -27,8 +29,11 @@ const db = getFirestore(app);
 
 // 모든 할일 가져오기
 export async function fetchTodos() {
+  const todosRef = collection(db, "todos");
+  const descQuery = query(todosRef, orderBy("created_at", "desc"));
+
   //  모든 문서가져오기
-  const querySnapshot = await getDocs(collection(db, "todos"));
+  const querySnapshot = await getDocs(descQuery);
 
   if (querySnapshot.empty) {
     return [];
