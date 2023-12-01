@@ -108,7 +108,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
     setIsLoding(true);
     await new Promise((f) => setTimeout(f, 600));
     await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/todos/${id}`, {
-      method: "post",
+      method: "delete",
       cache: "no-store",
     });
     router.refresh();

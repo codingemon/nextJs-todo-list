@@ -32,5 +32,5 @@ export async function POST(request: NextRequest) {
     data: addedTodo,
   };
   // 새로 만들면 201로 많이함
-  return NextResponse.json(response, { status: 201 });
+  return Response.json(response, { status: 201 });
 }
