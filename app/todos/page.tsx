@@ -4,10 +4,14 @@ import { fetchTodos } from "@/data/firestore";
 
 // 서버 컴포넌트에서 API를 땡기자
 async function fetchTodosApiCall() {
-  console.log("fetchTodosApiCall");
+  console.log("fetchTodosApiCall called");
   const res = await fetch(`${process.env.BASE_URL}/api/todos/`, {
     cache: "no-store",
   });
+
+  const contentTypeCheck = res.headers.get("content-Type");
+  console.log("fetchTodosApiCall contentTypeCheck: ", contentTypeCheck);
+
   return res.json();
 }
 

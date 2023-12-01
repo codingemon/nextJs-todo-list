@@ -221,7 +221,9 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
                 <TableCell className={applyIsDoneUI(aTodo.is_done)}>
                   {aTodo.id.slice(0, 4)}
                 </TableCell>
-                <TableCell className={applyIsDoneUI(aTodo.is_done)}>{aTodo.title}</TableCell>
+                <TableCell className={applyIsDoneUI(aTodo.is_done)}>
+                  {aTodo.title}
+                </TableCell>
                 <TableCell>
                   {aTodo.is_done ? (
                     <svg
@@ -255,7 +257,9 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
                     </svg>
                   )}
                 </TableCell>
-                <TableCell className={applyIsDoneUI(aTodo.is_done)}>{aTodo.title}>{`${aTodo.created_at}`}</TableCell>
+                <TableCell className={applyIsDoneUI(aTodo.is_done)}>
+                  {`${aTodo.created_at}`}
+                </TableCell>
                 <TableCell>
                   <div className="relative flex justify-end items-center gap-2">
                     <Dropdown>
