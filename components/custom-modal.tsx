@@ -34,11 +34,13 @@ const CustomModal = ({
   const [isLoading, setIsLoading] = useState(false);
 
   // 수정된 입력
-  const [editedTodoInput, setEditedTodoInput] = useState<string>("");
+  const [editedTodoInput, setEditedTodoInput] = useState<string>(
+    focusedTodo.title
+  );
 
-  useEffect(() => {
-    setEditedTodoInput(focusedTodo.title);
-  }, []);
+  //   useEffect(() => {
+  //     setEditedTodoInput(focusedTodo.title);
+  //   }, []);
 
   const DetailModal = () => {
     return (
