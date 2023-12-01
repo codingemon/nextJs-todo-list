@@ -9,8 +9,13 @@ async function fetchTodosApiCall() {
     cache: "no-store",
   });
 
-  const contentTypeCheck = res.headers.get("content-Type");
-  console.log("fetchTodosApiCall contentTypeCheck: ", contentTypeCheck);
+  const contentTypeHeaderValue = res.headers.get("content-Type");
+
+  // 수정중 json
+  if (contentTypeHeaderValue?.includes("text/html")) {
+    console.log("fetchTodosApiCall contentTypeCheck: ", contentTypeHeaderValue);
+    return null;
+  }
 
   return res.json();
 }
@@ -18,6 +23,9 @@ async function fetchTodosApiCall() {
 // 서버 컴포넌트
 export default async function TodosPage() {
   const response = await fetchTodosApiCall();
+
+  // fix json
+  const fetchedTodos = response?.data ?? [];
 
   return (
     <div className="flex-col space-y-8">
