@@ -32,6 +32,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { VerticalDotsIcon } from "@/components/icons";
 import { CustomModalType } from "@/types/index";
+import CustomModal from "./custom-modal";
 
 const TodosTable = ({ todos }: { todos: Todo[] }) => {
   // 할일 추가 가능 여부
@@ -41,7 +42,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
   const [newTodoInput, setnewTodoInput] = useState("");
 
   // 로딩상태
-  const [isLoding, setisLoding] = useState<boolean>(false);
+  const [isLoding, setIsLoding] = useState<boolean>(false);
 
   // 띄우는 모달 상태
   const [currentModalData, setCurrentModalData] = useState<FocusedTodoType>({
@@ -58,7 +59,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
       return;
     }
     setTodoAddEnable(false);
-    setisLoding(true);
+    setIsLoding(true);
     await new Promise((f) => setTimeout(f, 600));
     await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/todos/`, {
       method: "post",
@@ -69,13 +70,55 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
     });
     setnewTodoInput("");
     router.refresh();
-    setisLoding(false);
-    notifyTodoAddedEvent("할일을 추가했어요! 👨‍💻");
+    setIsLoding(false);
+    notifySuccessEvent("할일을 추가했어요! 👨‍💻");
     console.log(`할일 추가완료 : ${newTodoInput}`);
     // const res = await fetch(`${process.env.BASE_URL}/api/todos/`);
   };
 
-  const notifyTodoAddedEvent = (msg: string) => toast.success(msg);
+  // 할일 수정
+  const editATodoHandler = async (
+    id: string,
+    editedTitle: string,
+    edtiedIsDone: string
+  ) => {
+    setIsLoding(true);
+    await new Promise((f) => setTimeout(f, 600));
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/todos/${id}`, {
+      method: "post",
+      body: JSON.stringify({
+        title: editedTitle,
+        is_done: edtiedIsDone,
+      }),
+      cache: "no-store",
+    });
+    router.refresh();
+    setIsLoding(false);
+    notifySuccessEvent("할일을 수정했어요! 👍");
+    console.log(`할일 추가완료 : ${newTodoInput}`);
+    // const res = await fetch(`${process.env.BASE_URL}/api/todos/`);
+  };
+
+  // 완료시 체크
+  const applyIsDoneUI = (isDone: boolean) =>
+    isDone ? "line-through text-gray-900/50 dark:text-white/40" : "";
+
+  // 삭제
+  const deleteATodoHandler = async (id: string) => {
+    setIsLoding(true);
+    await new Promise((f) => setTimeout(f, 600));
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/todos/${id}`, {
+      method: "post",
+      cache: "no-store",
+    });
+    router.refresh();
+    setIsLoding(false);
+    notifySuccessEvent("할일을 삭제했어요! 👍");
+    console.log(`할일 삭제 완료 : ${newTodoInput}`);
+    // const res = await fetch(`${process.env.BASE_URL}/api/todos/`);
+  };
+
+  const notifySuccessEvent = (msg: string) => toast.success(msg);
 
   // 모달
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -84,28 +127,25 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
     return (
       <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                {currentModalData.modalType}
-              </ModalHeader>
-              <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
-            </>
-          )}
+          {(onClose) =>
+            currentModalData.focusedTodo && (
+              <CustomModal
+                focusedTodo={currentModalData.focusedTodo}
+                modalType={currentModalData.modalType}
+                onClose={onClose}
+                onEdit={async (id, title, isDone) => {
+                  console.log(id, title, isDone);
+                  await editATodoHandler(id, title, isDone);
+                  onClose();
+                }}
+                onDelete={async (id) => {
+                  console.log("onDelete / id:", id);
+                  await deleteATodoHandler(id);
+                  onClose();
+                }}
+              />
+            )
+          }
         </ModalContent>
       </Modal>
     );
@@ -178,8 +218,10 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
           {todos &&
             todos.map((aTodo: Todo) => (
               <TableRow key={aTodo.id}>
-                <TableCell>{aTodo.id.slice(0, 4)}</TableCell>
-                <TableCell>{aTodo.title}</TableCell>
+                <TableCell className={applyIsDoneUI(aTodo.is_done)}>
+                  {aTodo.id.slice(0, 4)}
+                </TableCell>
+                <TableCell className={applyIsDoneUI(aTodo.is_done)}>{aTodo.title}</TableCell>
                 <TableCell>
                   {aTodo.is_done ? (
                     <svg
@@ -213,7 +255,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
                     </svg>
                   )}
                 </TableCell>
-                <TableCell>{`${aTodo.created_at}`}</TableCell>
+                <TableCell className={applyIsDoneUI(aTodo.is_done)}>{aTodo.title}>{`${aTodo.created_at}`}</TableCell>
                 <TableCell>
                   <div className="relative flex justify-end items-center gap-2">
                     <Dropdown>
@@ -233,7 +275,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
                         }}
                       >
                         <DropdownItem key="detail">상세보기</DropdownItem>
-                        <DropdownItem key="update">수정</DropdownItem>
+                        <DropdownItem key="edit">수정</DropdownItem>
                         <DropdownItem key="delete">삭제</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
