@@ -6,13 +6,10 @@ import {
   ModalBody,
   ModalFooter,
   Input,
-  Checkbox,
-  Link,
   CircularProgress,
   Switch,
 } from "@nextui-org/react";
 import { CustomModalType, FocusedTodoType, Todo } from "@/types";
-import { useRouter } from "next/navigation";
 
 const CustomModal = ({
   focusedTodo,

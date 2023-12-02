@@ -20,9 +20,6 @@ import {
   DropdownItem,
   Modal,
   ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
 
@@ -96,7 +93,6 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
     setIsLoding(false);
     notifySuccessEvent("할일을 수정했어요! 👍");
     console.log(`할일 추가완료 : ${newTodoInput}`);
-    // const res = await fetch(`${process.env.BASE_URL}/api/todos/`);
   };
 
   // 완료시 체크
@@ -115,7 +111,6 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
     setIsLoding(false);
     notifySuccessEvent("할일을 삭제했어요! 👍");
     console.log(`할일 삭제 완료 : ${newTodoInput}`);
-    // const res = await fetch(`${process.env.BASE_URL}/api/todos/`);
   };
 
   const notifySuccessEvent = (msg: string) => toast.success(msg);
