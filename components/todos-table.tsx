@@ -58,7 +58,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
     setTodoAddEnable(false);
     setIsLoding(true);
     await new Promise((f) => setTimeout(f, 600));
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/todos/`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/todos`, {
       method: "post",
       body: JSON.stringify({
         title: title,
