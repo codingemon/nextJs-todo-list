@@ -1,6 +1,5 @@
 import { title } from "@/components/primitives";
 import TodosTable from "@/components/todos-table";
-import { fetchTodos } from "@/data/firestore";
 import { Todo } from "@/types";
 
 // 서버 컴포넌트에서 API를 땡기자
