@@ -5,6 +5,7 @@ import { button as buttonStyles } from "@nextui-org/theme";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
+import Head from "next/head";
 
 export default function Home() {
   return (
@@ -26,7 +27,7 @@ export default function Home() {
           href={siteConfig.links.github}
         >
           <GithubIcon size={20} />
-          GitHub(HaeBoJa)
+          Pikacoding GitHub(HaeBoJa)
         </Link>
       </div>
 

@@ -58,6 +58,7 @@ const TodosTable = ({ todos }: { todos: Todo[] }) => {
     setTodoAddEnable(false);
     setIsLoding(true);
     await new Promise((f) => setTimeout(f, 600));
+    // /api/todos/ 에서 api/todos로 수정
     await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/todos`, {
       method: "post",
       body: JSON.stringify({
