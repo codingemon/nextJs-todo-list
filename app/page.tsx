@@ -27,7 +27,7 @@ export default function Home() {
           href={siteConfig.links.github}
         >
           <GithubIcon size={20} />
-          Pikacoding GitHub(HaeBoJa)
+          GitHub(HaeBoJa)
         </Link>
       </div>
 
