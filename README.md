@@ -7,3 +7,4 @@
   - NextUI
 - 배포 🌏
   - Vercel
+  - https://next-js-todo-list-2vtzp09ne-choisunghyungs-projects.vercel.app/
