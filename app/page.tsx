@@ -5,7 +5,6 @@ import { button as buttonStyles } from "@nextui-org/theme";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
-import Head from "next/head";
 
 export default function Home() {
   return (
@@ -35,7 +34,8 @@ export default function Home() {
         <Snippet hideSymbol hideCopyButton variant="flat">
           <span>
             사용 기술 <Code color="primary">Next.js</Code>{" "}
-            <Code color="primary">Typescript</Code>
+            <Code color="primary">Typescript</Code>{" "}
+            <Code color="primary">TailwindCSS</Code>
           </span>
         </Snippet>
       </div>
