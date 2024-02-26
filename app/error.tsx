@@ -1,30 +1,30 @@
-'use client' 
- 
-import { useEffect } from 'react'
- 
+"use client";
+
+import { useEffect } from "react";
+
 export default function Error({
   error,
   reset,
 }: {
-  error: Error
-  reset: () => void
+  error: Error;
+  reset: () => void;
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error(error)
-  }, [error])
- 
+    console.error(error);
+  }, [error]);
+
   return (
     <div>
-      <h2>Something went wrong!</h2>
+      <h2>페이지에 문제가 생겼어요!!</h2>
       <button
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
         }
       >
-        Try again
+        다시 시도해볼까요?
       </button>
     </div>
-  )
+  );
 }
